@@ -1,0 +1,28 @@
+# Three-Agent Architecture Configuration
+agents:
+  qclaw:
+    role: orchestrator
+    type: openclaw
+    host: mac-mini
+    responsibilities:
+      - task orchestration
+      - message routing
+      - knowledge base (ima)
+      - resource-intensive tasks (video/audio)
+      - cron scheduling
+  
+  hermes:
+    role: developer
+    type: hermes
+    host: mac-hermes
+    responsibilities:
+      - code development
+      - GitHub operations
+      - model inference
+      - terminal execution
+  
+  human:
+    role: decision-maker
+    files:
+      - USER.md
+      - MEMORY.md
