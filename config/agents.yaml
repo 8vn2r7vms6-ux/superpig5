@@ -1,28 +1,84 @@
-# Three-Agent Architecture Configuration
+# Three-Agent Architecture Configuration (2026-06-30)
 agents:
   qclaw:
     role: orchestrator
     type: openclaw
-    host: mac-mini
+    host: 192.168.1.10
+    local_model: qwen2.5:1.5b
+    skills: 48
     responsibilities:
-      - task orchestration
-      - message routing
-      - knowledge base (ima)
-      - resource-intensive tasks (video/audio)
+      - task orchestration and routing
+      - message routing (QQ/WeChat/腾讯文档)
+      - knowledge base (IMA/腾讯文档)
+      - resource monitoring (cluster_monitor.py)
       - cron scheduling
+      - local Ollama routing (ollama_router.py)
   
   hermes:
-    role: developer
+    role: developer/executor
     type: hermes
-    host: mac-hermes
+    host: 192.168.1.4
+    local_model: deepseek-r1:7b
+    python_packages:
+      - gate_api (739 classes)
+      - yfinance, ta, scipy, pandas, numpy, sklearn
     responsibilities:
       - code development
+      - quantitative research and backtesting
       - GitHub operations
-      - model inference
-      - terminal execution
+      - Ollama distributed inference coordination
   
-  human:
-    role: decision-maker
-    files:
-      - USER.md
-      - MEMORY.md
+  openhuman:
+    role: memory/learning hub
+    type: openhuman
+    host: 192.168.1.8
+    rpc_port: 7788
+    rpc_methods: 657
+    capabilities:
+      - memory_tree (long-term storage)
+      - learning profiles (user understanding)
+      - model_council (multi-model voting)
+      - agent_team (multi-agent collaboration)
+    to_authorize:
+      - Composio (Gmail/GitHub/Slack sync)
+      - Voice Pipeline (TTS/STT cloning)
+      - Web3 wallet (crypto monitoring)
+
+  nas:
+    role: storage/scheduler
+    type: zspace
+    host: 192.168.1.7:10000
+    storage: /data_n004 (930GB NVMe)
+    responsibilities:
+      - 量化数据存储
+      - 定时任务执行
+      - 策略运行
+      - 930GB NVMe存储
+
+# Ollama Cluster (distributed inference)
+ollama_cluster:
+  mac5:
+    ip: 192.168.1.2
+    user: xuanjing5
+    models: [qwen2.5:7b, qwen2.5:14b]
+    use: [general, large]
+  mac6:
+    ip: 192.168.1.5
+    user: xuanjing2
+    models: [qwen2.5:14b, qwen2.5-coder:14b]
+    use: [large, coder]
+  mac7:
+    ip: 192.168.1.6
+    user: xuanjing6
+    models: [nomic-embed-text:latest, qwen2.5:7b]
+    use: [embed, quick]
+  mac9:
+    ip: 192.168.1.13
+    user: xuanjing7
+    models: [glm4:9b]
+    use: [chinese, reasoning]
+  mac8:
+    ip: 192.168.1.9
+    user: xuanjing4
+    models: [deepseek-r1:14b]  # 待macOS升级后安装
+    use: [deep_reasoning]
